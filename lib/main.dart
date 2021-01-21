@@ -45,15 +45,20 @@ class MainPage extends HookWidget {
           appBar: AppBar(
             title: Text('iKut annotation'),
           ),
-          body: Stack(children: [_buildPreviousImage(), _buildImage()])),
+          body: Stack(children: [
+            _buildPreviousImage(),
+            _buildImage(),
+            _buildLabels()
+          ])),
     );
   }
 
   HookBuilder _buildImage() {
     return HookBuilder(builder: (context) {
       final mainUiModel = useProvider(mainStateNotifierProvider.state);
-      if (mainUiModel.fileNames.length >= 1) {
-        return Image.file(File(mainUiModel.fileNames[mainUiModel.imageIndex]));
+      if (mainUiModel.images.length >= 1) {
+        return Image.file(
+            File(mainUiModel.images[mainUiModel.imageIndex].path));
       } else {
         return Center(child: CircularProgressIndicator());
       }
@@ -63,9 +68,39 @@ class MainPage extends HookWidget {
   HookBuilder _buildPreviousImage() {
     return HookBuilder(builder: (context) {
       final mainUiModel = useProvider(mainStateNotifierProvider.state);
-      if (mainUiModel.fileNames.length >= 1) {
+      if (mainUiModel.images.length >= 1) {
         return Image.file(
-            File(mainUiModel.fileNames[mainUiModel.previousImageIndex]));
+            File(mainUiModel.images[mainUiModel.previousImageIndex].path));
+      } else {
+        return Container();
+      }
+    });
+  }
+
+  HookBuilder _buildLabels() {
+    return HookBuilder(builder: (context) {
+      final textStyle = TextStyle(color: Colors.white, fontSize: 32);
+      final mainUiModel = useProvider(mainStateNotifierProvider.state);
+      if (mainUiModel.images.length >= 1) {
+        return Column(
+          children: [
+            Spacer(),
+            Container(
+                color: Colors.black54,
+                padding: EdgeInsets.all(16),
+                child: Row(
+                    children: mainUiModel.labels.map((label) {
+                  return Expanded(
+                      child: Visibility(
+                          visible: label ==
+                              mainUiModel.images[mainUiModel.imageIndex].label,
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          child: Text(label, style: textStyle)));
+                }).toList()))
+          ],
+        );
       } else {
         return Container();
       }
