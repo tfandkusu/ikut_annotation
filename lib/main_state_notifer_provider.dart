@@ -26,20 +26,16 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     state = state.copyWith(images: images, labels: labels);
   }
 
-  void next() {
-    if (state.imageIndex + 1 < state.images.length) {
-      state = state.copyWith(
-          imageIndex: state.imageIndex + 1,
-          previousImageIndex: state.imageIndex);
+  void move(int diff) {
+    int nextIndex = state.imageIndex + diff;
+    if (nextIndex >= state.images.length) {
+      nextIndex = state.images.length - 1;
+    }else if(nextIndex < 0) {
+      nextIndex = 0;
     }
-  }
-
-  void previous() {
-    if (state.imageIndex - 1 >= 0) {
-      state = state.copyWith(
-          imageIndex: state.imageIndex - 1,
-          previousImageIndex: state.imageIndex);
-    }
+    state = state.copyWith(
+        imageIndex: nextIndex,
+        previousImageIndex: state.imageIndex);
   }
 }
 

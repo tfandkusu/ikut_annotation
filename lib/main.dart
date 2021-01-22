@@ -34,9 +34,13 @@ class MainPage extends HookWidget {
       onKey: (key) {
         if (key is RawKeyDownEvent) {
           if (key.logicalKey.keyLabel == ']') {
-            mainStateNotifier.next();
+            mainStateNotifier.move(1);
           } else if (key.logicalKey.keyLabel == '[') {
-            mainStateNotifier.previous();
+            mainStateNotifier.move(-1);
+          } else if (key.logicalKey.keyLabel == 'p') {
+            mainStateNotifier.move(100);
+          } else if (key.logicalKey.keyLabel == 'o') {
+            mainStateNotifier.move(-100);
           }
         }
       },
@@ -84,6 +88,16 @@ class MainPage extends HookWidget {
       if (mainUiModel.images.length >= 1) {
         return Column(
           children: [
+            Row(
+              children: [
+                Container(
+                    color: Colors.black54,
+                    padding: EdgeInsets.all(16),
+                    child:
+                        Text(mainUiModel.imageIndex.toString(), style: textStyle)),
+                Spacer()
+              ],
+            ),
             Spacer(),
             Container(
                 color: Colors.black54,
