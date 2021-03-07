@@ -16,18 +16,20 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
   bool writing = false;
 
   void _load() async {
-    // 環境変数からホームディレクトリを取得
-    final home = Platform.environment['HOME'];
+    final dir = Directory.current.path;
     // CSVを読み込む
-    _file = new File('$home/work/ikut_model/images.csv');
+    _file = new File('$dir/result.csv');
     final csvString = await _file.readAsString();
     final fields = CsvToListConverter().convert(csvString);
     final images = fields.map((items) {
-      String path = '$home/work/ikut_model/src_image/' + items[0];
-      String label = items[1];
+      String path = '$dir/image/' + items[0];
+      String label = 'takoyaki';
+      if (items.length >= 2) {
+        label = items[1];
+      }
       return LabeledImage(path, label);
     }).toList();
-    final labels = ['other', 'start', 'end', 'exclude'];
+    final labels = ['takoyaki', 'sushi', 'gyoza', 'other'];
     state = state.copyWith(images: images, labels: labels);
   }
 
@@ -47,7 +49,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     if (labelIndex >= state.labels.length) {
       return;
     }
-    if(writing) {
+    if (writing) {
       return;
     }
     writing = true;
@@ -66,6 +68,5 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
   }
 }
 
-final mainStateNotifierProvider = StateNotifierProvider((_) {
-  return MainStateNotifier();
-});
+final mainStateNotifierProvider =
+    StateNotifierProvider((_) => MainStateNotifier());

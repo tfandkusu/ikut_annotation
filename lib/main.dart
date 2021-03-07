@@ -69,8 +69,13 @@ class MainPage extends HookWidget {
     return HookBuilder(builder: (context) {
       final mainUiModel = useProvider(mainStateNotifierProvider.state);
       if (mainUiModel.images.length >= 1) {
-        return Image.file(
-            File(mainUiModel.images[mainUiModel.imageIndex].path));
+        return Container(
+          color: Colors.black,
+          constraints: BoxConstraints.expand(),
+          child: Image.file(
+              File(mainUiModel.images[mainUiModel.imageIndex].path),
+              fit: BoxFit.contain),
+        );
       } else {
         return Center(child: CircularProgressIndicator());
       }
@@ -81,8 +86,13 @@ class MainPage extends HookWidget {
     return HookBuilder(builder: (context) {
       final mainUiModel = useProvider(mainStateNotifierProvider.state);
       if (mainUiModel.images.length >= 1) {
-        return Image.file(
-            File(mainUiModel.images[mainUiModel.previousImageIndex].path));
+        return Container(
+          color: Colors.black,
+          constraints: BoxConstraints.expand(),
+          child: Image.file(
+              File(mainUiModel.images[mainUiModel.previousImageIndex].path),
+              fit: BoxFit.contain),
+        );
       } else {
         return Container();
       }
