@@ -16,20 +16,8 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
   bool writing = false;
 
   void _load() async {
-    final dir = Directory.current.path;
-    // CSVを読み込む
-    _file = new File('$dir/result.csv');
-    final csvString = await _file.readAsString();
-    final fields = CsvToListConverter().convert(csvString);
-    final images = fields.map((items) {
-      String path = '$dir/image/' + items[0];
-      String label = 'takoyaki';
-      if (items.length >= 2) {
-        label = items[1];
-      }
-      return LabeledImage(path, label);
-    }).toList();
-    final labels = ['takoyaki', 'sushi', 'gyoza', 'other'];
+    final labels = await _loadLabels();
+    final images = await _loadResults(labels);
     state = state.copyWith(images: images, labels: labels);
   }
 
@@ -65,6 +53,35 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     }).toList());
     _file.writeAsString(csvString);
     writing = false;
+  }
+
+  /// label.txtからラベル一覧を取得する
+  Future<List<String>> _loadLabels() async {
+    final dir = Directory.current.path;
+    final file = new File('$dir/label.txt');
+    final csvString = await file.readAsString();
+    final fields = CsvToListConverter().convert(csvString);
+    final labels = <String>[];
+    fields.map((items) => labels.add(items[0])).toList();
+    return labels;
+  }
+
+  /// result.csvから画像に対するラベル付け一覧を得る
+  /// [labels] ラベル一覧
+  Future<List<LabeledImage>> _loadResults(List<String> labels) async {
+    final dir = Directory.current.path;
+    _file = new File('$dir/result.csv');
+    final csvString = await _file.readAsString();
+    final fields = CsvToListConverter().convert(csvString);
+    return fields.map((items) {
+      String path = '$dir/image/' + items[0];
+      // ラベルが付いていないときは最初のラベルを使う
+      String label = labels[0];
+      if (items.length >= 2) {
+        label = items[1];
+      }
+      return LabeledImage(path, label);
+    }).toList();
   }
 }
 
