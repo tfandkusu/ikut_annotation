@@ -10,9 +10,10 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     _load();
   }
 
+  // result CSV file.
+  // Columns are image file name and label.
   File _file;
 
-  // 書き込み中フラグ
   bool writing = false;
 
   void _load() async {
@@ -21,6 +22,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     state = state.copyWith(images: images, labels: labels);
   }
 
+  /// Update selected image
   void move(int diff) {
     int nextIndex = state.imageIndex + diff;
     if (nextIndex >= state.images.length) {
@@ -32,7 +34,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
         imageIndex: nextIndex, previousImageIndex: state.imageIndex);
   }
 
-  /// 選択している画像のラベルを更新する
+  /// Update selected image's label
   void update(int labelIndex) async {
     if (labelIndex >= state.labels.length) {
       return;
@@ -55,7 +57,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     writing = false;
   }
 
-  /// label.txtからラベル一覧を取得する
+  /// Load labels from label.txt
   Future<List<String>> _loadLabels() async {
     final dir = Directory.current.path;
     final file = new File('$dir/label.txt');
@@ -66,8 +68,8 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     return labels;
   }
 
-  /// result.csvから画像に対するラベル付け一覧を得る
-  /// [labels] ラベル一覧
+  /// Load labeled images from result.csv
+  /// [labels] Labels
   Future<List<LabeledImage>> _loadResults(List<String> labels) async {
     final dir = Directory.current.path;
     _file = new File('$dir/result.csv');
