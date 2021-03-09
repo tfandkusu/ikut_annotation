@@ -2,6 +2,8 @@
 
 A simple annotation tool for image classification.
 
+<img src="https://raw.githubusercontent.com/tfandkusu/ikut_annotation/main/doc/movie.gif">
+
 # How to run
 
 ```sh
