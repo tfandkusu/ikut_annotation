@@ -35,4 +35,4 @@ flutter run -d macos
 
 # References
 
-[Food 101](https://www.kaggle.com/dansbecker/food-101)
+[Food 101](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/)
