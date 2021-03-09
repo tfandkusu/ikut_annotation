@@ -63,8 +63,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     final file = new File('$dir/label.txt');
     final csvString = await file.readAsString();
     final fields = CsvToListConverter().convert(csvString);
-    final labels = <String>[];
-    fields.map((items) => labels.add(items[0])).toList();
+    final labels = fields.map((items) => items[0] as String).toList();
     return labels;
   }
 
