@@ -25,34 +25,34 @@ class IkutAnnotationApp extends StatelessWidget {
 }
 
 class MainPage extends HookWidget {
-  final FocusNode _focusNode = FocusNode()..requestFocus();
-
   @override
   Widget build(BuildContext context) {
     final mainStateNotifier = useProvider(mainStateNotifierProvider);
-    return RawKeyboardListener(
-      onKey: (key) {
-        if (key is RawKeyDownEvent) {
-          if (key.logicalKey.keyLabel == ']') {
+    return Focus(
+      autofocus: true,
+      onKey: (node, event) {
+        print(event);
+        if (event is RawKeyDownEvent) {
+          if (event.logicalKey.keyLabel == ']') {
             mainStateNotifier.move(1);
-          } else if (key.logicalKey.keyLabel == '[') {
+          } else if (event.logicalKey.keyLabel == '[') {
             mainStateNotifier.move(-1);
-          } else if (key.logicalKey.keyLabel == 'p') {
+          } else if (event.logicalKey.keyLabel == 'p') {
             mainStateNotifier.move(100);
-          } else if (key.logicalKey.keyLabel == 'o') {
+          } else if (event.logicalKey.keyLabel == 'o') {
             mainStateNotifier.move(-100);
-          } else if (key.logicalKey.keyLabel == 'z') {
+          } else if (event.logicalKey.keyLabel == 'z') {
             mainStateNotifier.update(0);
-          } else if (key.logicalKey.keyLabel == 'x') {
+          } else if (event.logicalKey.keyLabel == 'x') {
             mainStateNotifier.update(1);
-          } else if (key.logicalKey.keyLabel == 'c') {
+          } else if (event.logicalKey.keyLabel == 'c') {
             mainStateNotifier.update(2);
-          } else if (key.logicalKey.keyLabel == 'v') {
+          } else if (event.logicalKey.keyLabel == 'v') {
             mainStateNotifier.update(3);
           }
         }
+        return true;
       },
-      focusNode: _focusNode,
       child: Scaffold(
           appBar: AppBar(
             title: Text('iKut annotation'),
