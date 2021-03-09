@@ -31,7 +31,6 @@ class MainPage extends HookWidget {
     return Focus(
       autofocus: true,
       onKey: (node, event) {
-        print(event);
         if (event is RawKeyDownEvent) {
           if (event.logicalKey.keyLabel == ']') {
             mainStateNotifier.move(1);
