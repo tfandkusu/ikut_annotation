@@ -20,6 +20,8 @@ flutter run -d macos
 | image/ | images for labeling. |
 |result.csv | image file names and these labels. |
 
+result.csv's line break must be CRLF.
+
 # How to operate
 
 | Operation | Key |
