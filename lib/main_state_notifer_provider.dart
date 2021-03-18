@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart';
 
 import 'package:csv/csv.dart';
-import 'package:hooks_riverpod/all.dart';
 import 'package:ikut_annotation/main_ui_model.dart';
 
 class MainStateNotifier extends StateNotifier<MainUiModel> {
@@ -12,9 +12,9 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
 
   // result CSV file.
   // Columns are image file name and label.
-  File _file;
+  late File _file;
 
-  bool writing = false;
+  bool _writing = false;
 
   void _load() async {
     final labels = await _loadLabels();
@@ -39,10 +39,10 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     if (labelIndex >= state.labels.length) {
       return;
     }
-    if (writing) {
+    if (_writing) {
       return;
     }
-    writing = true;
+    _writing = true;
     String label = state.labels[labelIndex];
     List<LabeledImage> images = List.from(state.images);
     var image = state.images[state.imageIndex];
@@ -54,7 +54,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
       return [name, image.label];
     }).toList());
     _file.writeAsString(csvString);
-    writing = false;
+    _writing = false;
   }
 
   /// Load labels from label.txt
