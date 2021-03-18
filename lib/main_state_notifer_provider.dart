@@ -14,7 +14,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
   // Columns are image file name and label.
   late File _file;
 
-  bool writing = false;
+  bool _writing = false;
 
   void _load() async {
     final labels = await _loadLabels();
@@ -39,10 +39,10 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     if (labelIndex >= state.labels.length) {
       return;
     }
-    if (writing) {
+    if (_writing) {
       return;
     }
-    writing = true;
+    _writing = true;
     String label = state.labels[labelIndex];
     List<LabeledImage> images = List.from(state.images);
     var image = state.images[state.imageIndex];
@@ -54,7 +54,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
       return [name, image.label];
     }).toList());
     _file.writeAsString(csvString);
-    writing = false;
+    _writing = false;
   }
 
   /// Load labels from label.txt
@@ -69,7 +69,7 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
 
   /// Load labeled images from result.csv
   /// [labels] Labels
-  Future<List<LabeledImage>> _loadResults(List<String?> labels) async {
+  Future<List<LabeledImage>> _loadResults(List<String> labels) async {
     final dir = Directory.current.path;
     _file = new File('$dir/result.csv');
     final csvString = await _file.readAsString();
@@ -77,11 +77,11 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
     return fields.map((items) {
       String path = '$dir/image/' + items[0];
       // ラベルが付いていないときは最初のラベルを使う
-      String? label = labels[0];
+      String label = labels[0];
       if (items.length >= 2) {
         label = items[1];
       }
-      return LabeledImage(path, label!);
+      return LabeledImage(path, label);
     }).toList();
   }
 }
