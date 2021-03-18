@@ -16,7 +16,7 @@ flutter run -d macos
 
 | File or directory | Explanation　|
 | --- | --- |
-| label.txt | up to 4 classes labels to edit label. |
+| label.txt | up to 4 classes labels to edit label. Line break must be CRLF. |
 | image/ | images for labeling. |
 |result.csv | image file names and these labels. Line break must be CRLF. |
 
