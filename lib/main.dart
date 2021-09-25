@@ -36,21 +36,21 @@ class MainPage extends HookWidget {
             mainStateNotifier.move(1);
           } else if (event.logicalKey.keyLabel == '[') {
             mainStateNotifier.move(-1);
-          } else if (event.logicalKey.keyLabel == 'p') {
+          } else if (event.logicalKey.keyLabel == 'P') {
             mainStateNotifier.move(100);
-          } else if (event.logicalKey.keyLabel == 'o') {
+          } else if (event.logicalKey.keyLabel == 'O') {
             mainStateNotifier.move(-100);
-          } else if (event.logicalKey.keyLabel == 'z') {
+          } else if (event.logicalKey.keyLabel == 'Z') {
             mainStateNotifier.update(0);
-          } else if (event.logicalKey.keyLabel == 'x') {
+          } else if (event.logicalKey.keyLabel == 'X') {
             mainStateNotifier.update(1);
-          } else if (event.logicalKey.keyLabel == 'c') {
+          } else if (event.logicalKey.keyLabel == 'C') {
             mainStateNotifier.update(2);
-          } else if (event.logicalKey.keyLabel == 'v') {
+          } else if (event.logicalKey.keyLabel == 'V') {
             mainStateNotifier.update(3);
           }
         }
-        return true;
+        return KeyEventResult.handled;
       },
       child: Scaffold(
           appBar: AppBar(
