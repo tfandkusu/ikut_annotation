@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ikut_annotation/main_state_notifer_provider.dart';
 
@@ -24,13 +23,13 @@ class IkutAnnotationApp extends StatelessWidget {
   }
 }
 
-class MainPage extends HookWidget {
+class MainPage extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final mainStateNotifier = useProvider(mainStateNotifierProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
     return Focus(
       autofocus: true,
       onKey: (node, event) {
+        final mainStateNotifier = ref.read(mainStateNotifierProvider.notifier);
         if (event is RawKeyDownEvent) {
           if (event.logicalKey.keyLabel == ']') {
             mainStateNotifier.move(1);
@@ -57,84 +56,86 @@ class MainPage extends HookWidget {
             title: Text('iKut annotation'),
           ),
           body: Stack(children: [
-            _buildPreviousImage(),
-            _buildImage(),
-            _buildLabels()
+            PreviousImageWidget(),
+            ImageWidget(),
+            LabelsWidget()
           ])),
     );
   }
+}
 
-  HookBuilder _buildImage() {
-    return HookBuilder(builder: (context) {
-      final mainUiModel = useProvider(mainStateNotifierProvider.state);
-      if (mainUiModel.images.length >= 1) {
-        return Container(
-          color: Colors.black,
-          constraints: BoxConstraints.expand(),
-          child: Image.file(
-              File(mainUiModel.images[mainUiModel.imageIndex].path),
-              fit: BoxFit.contain),
-        );
-      } else {
-        return Center(child: CircularProgressIndicator());
-      }
-    });
+class ImageWidget extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mainUiModel = ref.watch(mainStateNotifierProvider);
+    if (mainUiModel.images.length >= 1) {
+      return Container(
+        color: Colors.black,
+        constraints: BoxConstraints.expand(),
+        child: Image.file(File(mainUiModel.images[mainUiModel.imageIndex].path),
+            fit: BoxFit.contain),
+      );
+    } else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
+}
 
-  HookBuilder _buildPreviousImage() {
-    return HookBuilder(builder: (context) {
-      final mainUiModel = useProvider(mainStateNotifierProvider.state);
-      if (mainUiModel.images.length >= 1) {
-        return Container(
-          color: Colors.black,
-          constraints: BoxConstraints.expand(),
-          child: Image.file(
-              File(mainUiModel.images[mainUiModel.previousImageIndex].path),
-              fit: BoxFit.contain),
-        );
-      } else {
-        return Container();
-      }
-    });
+class PreviousImageWidget extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mainUiModel = ref.watch(mainStateNotifierProvider);
+    if (mainUiModel.images.length >= 1) {
+      return Container(
+        color: Colors.black,
+        constraints: BoxConstraints.expand(),
+        child: Image.file(
+            File(mainUiModel.images[mainUiModel.previousImageIndex].path),
+            fit: BoxFit.contain),
+      );
+    } else {
+      return Container();
+    }
   }
+}
 
-  HookBuilder _buildLabels() {
-    return HookBuilder(builder: (context) {
-      final textStyle = TextStyle(color: Colors.white, fontSize: 32);
-      final mainUiModel = useProvider(mainStateNotifierProvider.state);
-      if (mainUiModel.images.length >= 1) {
-        return Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                    color: Colors.black54,
-                    padding: EdgeInsets.all(16),
-                    child: Text(mainUiModel.imageIndex.toString(),
-                        style: textStyle)),
-                Spacer()
-              ],
-            ),
-            Spacer(),
-            Container(
-                color: Colors.black54,
-                padding: EdgeInsets.all(16),
-                child: Row(
-                    children: mainUiModel.labels.map((label) {
-                  return Expanded(
-                      child: Visibility(
-                          visible: label ==
-                              mainUiModel.images[mainUiModel.imageIndex].label,
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          child: Text(label, style: textStyle)));
-                }).toList()))
-          ],
-        );
-      } else {
-        return Container();
-      }
-    });
+class LabelsWidget extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textStyle = TextStyle(color: Colors.white, fontSize: 32);
+    final mainUiModel = ref.watch(mainStateNotifierProvider);
+    if (mainUiModel.images.length >= 1) {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                  color: Colors.black54,
+                  padding: EdgeInsets.all(16),
+                  child: Text(mainUiModel.imageIndex.toString(),
+                      style: textStyle)),
+              Spacer()
+            ],
+          ),
+          Spacer(),
+          Container(
+              color: Colors.black54,
+              padding: EdgeInsets.all(16),
+              child: Row(
+                  children: mainUiModel.labels.map((label) {
+                return Expanded(
+                    child: Visibility(
+                        visible: label ==
+                            mainUiModel.images[mainUiModel.imageIndex].label,
+                        maintainSize: true,
+                        maintainAnimation: true,
+                        maintainState: true,
+                        child: Text(label, style: textStyle)));
+              }).toList()))
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 }

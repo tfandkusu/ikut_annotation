@@ -87,4 +87,5 @@ class MainStateNotifier extends StateNotifier<MainUiModel> {
 }
 
 final mainStateNotifierProvider =
-    StateNotifierProvider((_) => MainStateNotifier());
+    StateNotifierProvider<MainStateNotifier, MainUiModel>(
+        (_) => MainStateNotifier());
