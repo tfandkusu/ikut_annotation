@@ -4,11 +4,26 @@ A simple annotation tool for image classification.
 
 <img src="https://raw.githubusercontent.com/tfandkusu/ikut_annotation/main/doc/movie.gif">
 
-# How to run
+# How to build
+
+Install a specific version of flutter by [asdf](https://github.com/asdf-vm/asdf).
+
+```sh
+asdf plugin add flutter
+asdf install
+asdf reshim
+```
+
+Build project.
 
 ```sh
 flutter pub get
 flutter pub run build_runner build
+```
+
+# How to run
+
+```sh
 flutter run -d macos
 ```
 
