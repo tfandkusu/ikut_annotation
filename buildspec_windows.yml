@@ -1,11 +1,9 @@
 version: 0.2
 phases:
   install:
-    on-failure: CONTINUE
     commands:
       - choco install -y fvm
-      - fvm install 2.5.0
-      - fvm use 2.5.0
+      - fvm use -f 2.5.0
       - fvm flutter config --enable-windows-desktop
   build:
     commands:
