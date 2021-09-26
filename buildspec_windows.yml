@@ -1,6 +1,7 @@
 version: 0.2
 phases:
   install:
+    on-failure: CONTINUE
     commands:
       - choco install -y fvm
       - fvm install 2.5.0
