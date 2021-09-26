@@ -2,6 +2,7 @@ version: 0.2
 phases:
   install:
     commands:
+      # memo: Is choco installed ?
       - choco install fvm
       - fvm install 2.5.0
       - fvm use 2.5.0
