@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - choco upgrade chocolatey
+      - choco upgrade -y chocolatey
       - choco -v
       - choco install -y fvm
       - fvm install 2.5.0
