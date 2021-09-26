@@ -1,0 +1,15 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - choco upgrade -y chocolatey
+      - choco -v
+      - choco install -y fvm
+      - fvm install 2.5.0
+      - fvm use 2.5.0
+      - fvm flutter config --enable-windows-desktop
+  build:
+    commands:
+      - fvm flutter pub get
+      - fvm flutter pub run build_runner build
+      - fvm flutter build windows
